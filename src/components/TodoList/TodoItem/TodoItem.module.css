@@ -1,0 +1,36 @@
+.item {
+    display: flex;
+    align-items: center;
+    line-height: 100%;
+    margin-bottom: 15px;
+}
+
+.id {
+    padding-right: 10px;
+}
+
+.delete {
+    margin-left: auto;
+    width: 16px;
+    cursor: pointer;
+    filter: invert(1) brightness(0.5) grayscale(1) contrast(4.5);
+    transition: all .2s ease-in-out;
+}
+
+.delete:hover {
+    filter: none;
+}
+
+.text {
+    flex: 1;
+    padding-right: 10px;
+}
+
+.text.done {
+    text-decoration: line-through;
+}
+
+.input {
+    margin: 0 10px 0 0;
+    cursor: pointer;
+}
