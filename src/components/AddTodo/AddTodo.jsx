@@ -1,37 +1,41 @@
 import React from 'react';
 import {Formik, Form, Field, ErrorMessage} from 'formik';
-import s from './AddTodo.module.css'
+import styles from './AddTodo.module.css'
 import {connect} from "react-redux";
 import {addTodoAC} from "../../redux/todoReducer";
 
 const AddTodo = ({addTodo}) => {
+    const initialValues = {text: ''};
+    const validate = values => {
+        const errors = {};
+
+        if (!values.text.trim()) {
+            errors.text = 'Required';
+        }
+
+        return errors;
+    };
+    const onSubmit = (values, {setSubmitting}) => {
+        addTodo(values.text);
+        values.text = '';
+        setSubmitting(false);
+    };
+
     return (
         <div>
-            <h1 className={s.title}>Add Todo</h1>
+            <h1 className={styles.title}>Add Todo</h1>
             <Formik
-                initialValues={{text: ''}}
-                validate={values => {
-                    const errors = {};
-
-                    if (!values.text.trim()) {
-                        errors.text = 'Required';
-                    }
-
-                    return errors;
-                }}
-                onSubmit={(values, {setSubmitting}) => {
-                    addTodo({id: Date.now(), title: values.text, completed: false});
-                    values.text = '';
-                    setSubmitting(false);
-                }}
+                initialValues={initialValues}
+                validate={validate}
+                onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (
                 <Form>
-                    <Field type='text' name='text'/>
+                    <Field type="text" name="text"/>
                     <button type="submit" disabled={isSubmitting}>
                         Submit
                     </button>
-                    <ErrorMessage name='text' component='div'/>
+                    <ErrorMessage name="text" component="div"/>
                 </Form>
                     )}
             </Formik>

@@ -1,14 +1,14 @@
 import React from 'react';
-import s from './TodoItem.module.css'
+import styles from './TodoItem.module.css'
 import deleteIcon from './delete.svg'
 
-const TodoItem = ({id, todo, changeInput, deleteTodo}) => {
+const TodoItem = ({id, todo, changeTodo, deleteTodo}) => {
     return (
-        <div className={s.item}>
-            <input type="checkbox" className={s.input} onChange={() => {changeInput(todo.id)}} checked={todo.completed}/>
-            <strong className={s.id}>{id}</strong>
-            <span className={todo.completed ? `${s.text} ${s.done}` : s.text}>{todo.title}</span>
-            <div className={s.delete} onClick={() => {deleteTodo(todo.id)}}>
+        <div className={styles.item}>
+            <input type="checkbox" className={styles.input} onChange={() => {changeTodo(todo.id)}} checked={todo.completed}/>
+            <strong className={styles.id}>{id}</strong>
+            <span className={todo.completed ? `${styles.text} ${styles.done}` : styles.text}>{todo.title}</span>
+            <div className={styles.delete} onClick={() => {deleteTodo(todo.id)}}>
                 <img src={deleteIcon} alt=""/>
             </div>
         </div>

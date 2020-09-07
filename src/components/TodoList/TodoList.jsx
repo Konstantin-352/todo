@@ -1,48 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from "react-redux";
 import TodoItem from "./TodoItem/TodoItem";
-import {changeTodoAC, loadTodosAC} from "../../redux/todoReducer";
-import s from './TodoList.module.css';
+import {changeTodoAC, deleteTodoAC, loadTodosThunk} from "../../redux/todoReducer";
+import styles from './TodoList.module.css';
 
-const TodoList = ({todos, loadTodos, changeTodo}) => {
+const TodoList = ({todos, loadTodos, changeTodo, deleteTodo}) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         setTimeout(() => {
-            loadTodos();
-            setLoading(false);
+            loadTodos(setLoading);
         }, 2000);
 
     }, [loadTodos]);
 
-    console.log(todos);
-
-    const changeInput = (id) => {
-        const newTodos = todos.map(todo => {
-            if (todo.id === id) {
-                todo.completed = !todo.completed;
-            }
-            return todo;
-        });
-
-        changeTodo(newTodos);
-    };
-
-    const deleteTodo = (id) => {
-        const newTodos = todos.filter(todo => todo.id !== id);
-        changeTodo(newTodos);
-    };
-
     if (loading) {
-        return <div className={s.loading}>Loading...</div>
+        return <div className={styles.loading}>Loading...</div>
     }
 
     return (
-        <div className={s.todoList}>
+        <div className={styles.todoList}>
             <h1>TodoList</h1>
             {todos.length ? todos.map((todo, index) => {
-                return <TodoItem id={index + 1} key={todo.id} todo={todo} changeInput={changeInput} deleteTodo={deleteTodo}/>
-            }): loading ? null : <div>No todos!</div>}
+                return <TodoItem id={index + 1} key={todo.id} todo={todo} changeTodo={changeTodo} deleteTodo={deleteTodo}/>
+            }): <div>No todos!</div>}
             {}
         </div>
     )
@@ -53,8 +34,9 @@ const mapStateToPros = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    loadTodos: () => dispatch(loadTodosAC()),
-    changeTodo: (payload) => dispatch(changeTodoAC(payload))
+    loadTodos: (setLoading) => dispatch(loadTodosThunk(setLoading)),
+    changeTodo: (id) => dispatch(changeTodoAC(id)),
+    deleteTodo: (id) => dispatch(deleteTodoAC(id))
 });
 
 export default connect(mapStateToPros, mapDispatchToProps)(TodoList);

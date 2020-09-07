@@ -14,26 +14,39 @@ export const todoReducer = (state = initialState, action) => {
         case LOAD_TODOS:
             return {...state, todos: [...state.todos, ...action.payload]};
         case CHANGE_TODO:
-            return {...state, todos: [...action.payload]};
+            return {...state, todos: state.todos.map(todo => todo.id === action.payload ? {...todo, completed: !todo.completed} : todo)};
+        case DELETE_TODO:
+            return {...state, todos: state.todos.filter(todo => todo.id !== action.payload)};
         default:
             return state;
     }
 };
 
-export const addTodoAC = (payload) => ({
+export const addTodoAC = (title, id = Date.now(), completed = false) => ({
     type: ADD_TODO,
+    payload: {id, title, completed}
+});
+
+export const loadTodosAC = (payload) => ({
+    type: LOAD_TODOS,
     payload
 });
 
-export const loadTodosAC = () => {
+export const loadTodosThunk = (setLoading) => {
     return async dispatch => {
         const response = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=5');
         const json = await response.json();
-        dispatch({type: LOAD_TODOS, payload: json});
+        dispatch(loadTodosAC(json));
+        setLoading(false);
     }
 };
 
 export const changeTodoAC = (payload) => ({
     type: CHANGE_TODO,
+    payload
+});
+
+export const deleteTodoAC = (payload) => ({
+    type: DELETE_TODO,
     payload
 });
