@@ -9,7 +9,7 @@ const TodoList = ({todos, loadTodos, changeTodo, deleteTodo}) => {
 
     useEffect(() => {
         setTimeout(() => {
-            loadTodos(setLoading);
+            loadTodos(() => setLoading(false));
         }, 2000);
 
     }, [loadTodos]);

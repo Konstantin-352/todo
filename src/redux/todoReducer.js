@@ -1,7 +1,7 @@
-export const ADD_TODO = 'ADD_TODO';
-export const LOAD_TODOS = 'LOAD_TODOS';
-export const CHANGE_TODO = 'CHANGE_TODO';
-export const DELETE_TODO = 'DELETE_TODO';
+const ADD_TODO = 'TODO/ADD_TODO';
+const LOAD_TODOS = 'TODO/LOAD_TODOS';
+const CHANGE_TODO = 'TODO/CHANGE_TODO';
+const DELETE_TODO = 'TODO/DELETE_TODO';
 
 const initialState = {
     todos: []
@@ -32,13 +32,13 @@ export const loadTodosAC = (payload) => ({
     payload
 });
 
-export const loadTodosThunk = (setLoading) => {
-    return async dispatch => {
+export const loadTodosThunk = (callback = () => null) => async dispatch => {
         const response = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=5');
         const json = await response.json();
         dispatch(loadTodosAC(json));
-        setLoading(false);
-    }
+        if(callback && typeof callback === 'function') {
+            callback();
+        }
 };
 
 export const changeTodoAC = (payload) => ({
